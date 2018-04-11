@@ -92,7 +92,23 @@ class Alexnet():
         with tf.variable_scope("training"):
             self.train_step = tf.train.AdamOptimizer(1e-4).minimize(self.cross_entropy)
 
+    def train(self):
+        return
+    def test(self):
+        return
+    def save(self):
+        return
+    def restore(self):
+        return
 
+if __name__ == "__main__":
+    train_data
+    test_data
+    model = Alexnet()
+    model.train(train_data)
+    model.test(test_data)
+    model.save()
+    model.restore()
 
 
 
@@ -159,18 +175,6 @@ class Basic(b.Block):
                 train_step = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
 
         self.probability = tf.nn.softmax(self.fc3)
-
-class Vggnet():
-    def __init__(self):
-        print("아직 미완성입니다.")
-
-class Googlexnet():
-    def __init__(self):
-        print("아직 미완성입니다.")
-
-class Resnet():
-    def __init__(self):
-        print("아직 미완성입니다.")
 
 class DenseNet(b.Block):
     def __init__(self, number_of_label, growth_rate):
@@ -284,7 +288,19 @@ import numpy as np
 
 sys.path.append(os.getcwd() + "/Image_Classification/code/")
 
+
+
 if __name__ == "__main__":
+    train_data
+    test_data
+    model = Alexnet()
+    model.train(train_data)
+    model.test(test_data)
+    model.save()
+    model.restore()
+
+
+
     pre_train_path = os.getcwd() + "/Image_Classification/Pretrain/Basic/"
     train_path = os.getcwd() + "/Image_Classification/Data/train"
     log_path = os.getcwd() + "/Image_Classification/Log"
@@ -329,3 +345,5 @@ print("남성일 확률 : %g, 여성일 확률 : %g"%(prob[0][0] , prob[0][1]))
 
 sess.run(model.probability, {model.x: test_x, model.bol: bool})
 sess.run(model.fc3, {model.x: test_x, model.bol: bool})
+
+
