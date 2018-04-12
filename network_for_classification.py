@@ -1,4 +1,7 @@
+import argparse
+import numpy as np
 import tensorflow as tf
+from scipy.misc import imread, imresize
 
 class Block():
     def variable_initializer(self, init="", filter=[], output_channel=0, trainable=True, name=""):
@@ -101,24 +104,54 @@ class Alexnet():
     def restore(self):
         return
 
+
+def Train_generator(path):
+    image = list()
+    label = list()
+    for folder in os.listdir(path):
+        subpath = path + "/" + folder
+        for file in os.listdir(subpath):
+            subfile = subpath + "/" + file
+            image.append(imresize(imread(subfile), [224, 224, 3]).astype(np.float) / 255.)
+            if folder == "man":
+                label.append([1, 0])
+            else:
+                label.append([0, 1])
+    image = np.stack(image, axis=0)
+    label = np.stack(label, axis=0)
+    return (image, label)
+
+def Test_generator(path):
+    image = list()
+    for folder in os.listdir(path):
+        subfile = path + "/" + folder
+        image.append(imresize(imread(subfile), [224, 224, 3]).astype(np.float) / 255.)
+    image = np.stack(image, axis=0)
+    return image
+
+
+
+
+
 if __name__ == "__main__":
-    train_data
-    test_data
+    args = argparse.ArgumentParser()
+    args.add_argument('train_path', type=str, default='train_path')
+    args.add_argument('test_path', type=str, default='test_path')
+    args.add_argument('save_path', type=str, default='save_path')
+    args.add_argument('iteration', type=str, default='10000')
+    args.add_argument('batch', type=int, default=128)
+    config = args.parse_args()
+
+    train_data = Train_generator(config.train_path)
+    test_data = Test_generator(config.test_path)
     model = Alexnet()
     model.train(train_data)
     model.test(test_data)
-    model.save()
-    model.restore()
+    model.save(config.save_path)
+    model.restore(config.save_path)
 
 
-
-
-
-import os
-import sys
-import Block as b
-import numpy as np
-sys.path.append(os.getcwd() + "/Image_Classification/code/")
+################################################################################################
 
 class Basic(b.Block):
     def __init__(self):
@@ -251,42 +284,7 @@ class DenseNet(b.Block):
 
 
 
-import os
-import numpy as np
-from scipy.misc import imread, imresize
 
-def Train_generator(path):
-    image = list()
-    label = list()
-    for folder in os.listdir(path):
-        subpath = path + "/" + folder
-        for file in os.listdir(subpath):
-            subfile = subpath + "/" + file
-            image.append(imresize(imread(subfile), [224, 224, 3]).astype(np.float) / 255.)
-            if folder == "man":
-                label.append([1, 0])
-            else:
-                label.append([0, 1])
-    image = np.stack(image, axis=0)
-    label = np.stack(label, axis=0)
-    return (image, label)
-
-def Test_generator(path):
-    image = list()
-    for folder in os.listdir(path):
-        subfile = path + "/" + folder
-        image.append(imresize(imread(subfile), [224, 224, 3]).astype(np.float) / 255.)
-    image = np.stack(image, axis=0)
-    return image
-
-## 패키지 import
-import os
-import sys
-import Model
-import Load_data
-import numpy as np
-
-sys.path.append(os.getcwd() + "/Image_Classification/code/")
 
 
 
@@ -324,11 +322,6 @@ if __name__ == "__main__":
 
     tf.train.Saver().save(sess, pre_train_path)
 
-import os
-import sys
-import Model
-import Load_data
-import numpy as np
 
 sys.path.append(os.getcwd() + "/Image_Classification/code/")
 
